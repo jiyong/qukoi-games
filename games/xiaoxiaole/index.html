@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>植物大战僵尸 · 消消乐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/board.css">
+<link rel="stylesheet" href="css/lane.css">
+<link rel="stylesheet" href="css/ui.css">
+<link rel="stylesheet" href="css/fx.css">
+</head>
+<body>
+<main class="app" id="app">
+  <header class="hud">
+    <div class="sun-bank" id="sunBank">
+      <span class="sun-icon" aria-hidden="true"></span>
+      <span class="sun-count" id="sunCount">0</span>
+    </div>
+    <div class="level-info">
+      <div class="level-title" id="levelTitle">第 1 关</div>
+      <div class="progress" role="progressbar" aria-label="关卡进度">
+        <div class="progress-fill" id="progressFill"></div>
+        <span class="progress-flag" aria-hidden="true"></span>
+        <span class="progress-head" aria-hidden="true"></span>
+      </div>
+    </div>
+    <button class="icon-btn" id="btnSound" aria-label="切换音效">音</button>
+    <button class="icon-btn" id="btnPause" aria-label="暂停">停</button>
+  </header>
+
+  <section class="lane" id="lane" aria-label="僵尸进攻路线">
+    <div class="house"><div class="defenders" id="defenders"></div></div>
+    <div class="track" id="track"></div>
+    <div class="mower" id="mower"></div>
+  </section>
+
+  <section class="board-wrap">
+    <div class="board"><div class="grid" id="grid"></div></div>
+  </section>
+
+  <footer class="toolbar">
+    <button class="food-btn" id="btnFood" aria-label="购买能量豆">
+      <span class="ico" id="foodIco"></span>能量豆<span class="cost" id="foodCost">150</span>
+    </button>
+    <div class="score">得分 <b id="scoreVal">0</b></div>
+  </footer>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="overlay" id="menu">
+    <div class="card card-menu">
+      <h1 class="title"><span>植物大战僵尸</span><small>消消乐</small></h1>
+      <ul class="legend" id="legend"></ul>
+      <p class="tips">
+        <b>4 连</b>：整排 / 整列清除　<b>L、T 形</b>：3×3 爆炸<br>
+        <b>5 连</b>：能量豆，与任意植物交换，清除全部同种植物
+      </p>
+      <button class="btn btn-go" id="btnStart">开始冒险</button>
+      <button class="btn-link" id="btnReset" hidden>从第 1 关重新开始</button>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="result">
+    <div class="card">
+      <div class="result-art" id="resultArt"></div>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <p class="result-text" id="resultText"></p>
+      <button class="btn btn-go" id="btnPrimary"></button>
+      <button class="btn btn-alt" id="btnMenu">返回菜单</button>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="pause">
+    <div class="card">
+      <h2 class="result-title">暂停中</h2>
+      <button class="btn btn-go" id="btnResume">继续游戏</button>
+      <button class="btn btn-alt" id="btnRestart">重新开始本关</button>
+      <button class="btn btn-alt" id="btnMenu2">返回菜单</button>
+    </div>
+  </div>
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/art-plants.js"></script>
+<script src="js/art-zombies.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/grid.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/board.js"></script>
+<script src="js/lane.js"></script>
+<script src="js/lane-fx.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/resolve.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/input.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

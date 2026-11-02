@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Qukoi 游戏厅 - 经典 HTML5 小游戏合集">
+  <link rel="canonical" href="https://game.qukoi.com/">
+  <meta property="og:title" content="Qukoi 游戏厅">
+  <meta property="og:description" content="经典 HTML5 小游戏合集">
+  <meta property="og:url" content="https://game.qukoi.com/">
+  <meta name="theme-color" content="#0a0e1a">
+  <title>Qukoi 游戏厅</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎮</text></svg>">
+  <style>
+    :root {
+      --bg: #0a0e1a;
+      --fg: #e8edf5;
+      --muted: #6b7a99;
+      --border: #1a2332;
+      --accent: #00d9ff;
+      --accent-dim: #007a99;
+      --card-bg: #0f1622;
+      --card-hover: #151d2e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,217,255,0.03) 2px, rgba(0,217,255,0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0,217,255,0.03) 2px, rgba(0,217,255,0.03) 4px);
+    }
+    .masthead {
+      background: linear-gradient(135deg, var(--card-bg) 0%, #0a1220 100%);
+      border-bottom: 2px solid var(--accent-dim);
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+    }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--accent) 0%, #00b8ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px rgba(0,217,255,0.3);
+    }
+    .tagline {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .toolbar {
+      max-width: 1200px;
+      margin: 2rem auto 1rem;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .search {
+      flex: 1;
+      max-width: 400px;
+      padding: 0.75rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--fg);
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    .search:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0,217,255,0.1);
+    }
+    .count {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent-dim);
+      box-shadow: 0 8px 24px rgba(0,217,255,0.15);
+      background: var(--card-hover);
+    }
+    .screen {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background: #000;
+      overflow: hidden;
+    }
+    .screen::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 3px solid var(--border);
+      border-radius: 4px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .card:hover .screen::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.1) 0px,
+        transparent 2px,
+        transparent 4px,
+        rgba(0,0,0,0.1) 6px
+      );
+      pointer-events: none;
+      z-index: 3;
+      animation: scanline 8s linear infinite;
+    }
+    @keyframes scanline {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(100%); }
+    }
+    .screen img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      font-weight: 700;
+      color: rgba(255,255,255,0.2);
+    }
+    .info {
+      padding: 1rem 1.25rem;
+    }
+    .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--fg);
+    }
+    .desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+    .tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      background: rgba(0,217,255,0.1);
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      border-radius: 4px;
+    }
+    .error {
+      max-width: 600px;
+      margin: 4rem auto;
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: auto;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+    }
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <h1 class="logo">Qukoi 游戏厅</h1>
+    <p class="tagline">Classic HTML5 Games</p>
+  </header>
+  <div class="toolbar">
+    <input type="search" class="search" placeholder="搜索游戏..." aria-label="搜索">
+    <span class="count"></span>
+  </div>
+  <main class="grid" role="list"></main>
+  <footer>
+    <p>&copy; <span id="year"></span> Qukoi. All rights reserved.</p>
+    <p><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">京ICP备2026064856号-1</a></p>
+  </footer>
+  <script src="portal.js"></script>
+</body>
+</html>

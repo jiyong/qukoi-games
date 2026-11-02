@@ -1,0 +1,44 @@
+.banner {
+  position: absolute; left: 50%; top: 40%; z-index: 40;
+  padding: 8px 22px; border-radius: 14px; white-space: nowrap; pointer-events: none;
+  background: rgba(60, 28, 10, .78); color: #fff; font-size: 26px;
+  text-shadow: 0 2px 0 #000; opacity: 0;
+  transform: translate(-50%, -50%) scale(.6);
+  transition: opacity .25s, transform .35s var(--ease-pop);
+}
+.banner.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.banner.danger { background: rgba(150, 20, 10, .88); color: #ffe066; font-size: 28px; }
+
+.float-text {
+  position: absolute; z-index: 30; pointer-events: none; white-space: nowrap;
+  font-size: 22px; color: #fff; text-shadow: 0 2px 0 #2f5c12, 0 0 6px rgba(0, 0, 0, .6);
+  animation: floatUp .9s ease-out forwards;
+}
+.float-text.combo { font-size: 34px; color: var(--sun); text-shadow: 0 3px 0 #a34f06, 0 0 10px rgba(0, 0, 0, .5); }
+@keyframes floatUp {
+  from { transform: translate(-50%, -50%) scale(.5); }
+  30% { transform: translate(-50%, -70%) scale(1.15); opacity: 1; }
+  to { transform: translate(-50%, -150%) scale(1); opacity: 0; }
+}
+
+.fly-sun { position: absolute; z-index: 35; width: 30px; height: 30px; margin: -15px 0 0 -15px; pointer-events: none; }
+
+.beam { position: absolute; z-index: 6; pointer-events: none; box-shadow: 0 0 22px 8px rgba(255, 240, 120, .9); }
+.beam.row { left: 0; right: 0; height: 12.5%; background: linear-gradient(180deg, transparent, #fff9c4 25%, #fff 50%, #fff9c4 75%, transparent); animation: beamH .45s ease-out forwards; }
+.beam.col { top: 0; bottom: 0; width: 12.5%; background: linear-gradient(90deg, transparent, #fff9c4 25%, #fff 50%, #fff9c4 75%, transparent); animation: beamV .45s ease-out forwards; }
+@keyframes beamH { from { transform: scaleY(.2); opacity: 1; } to { transform: scaleY(1.2); opacity: 0; } }
+@keyframes beamV { from { transform: scaleX(.2); opacity: 1; } to { transform: scaleX(1.2); opacity: 0; } }
+
+.blast {
+  position: absolute; z-index: 6; width: 37.5%; height: 37.5%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, #fff7c2 0 18%, #ffb02e 38%, rgba(232, 64, 28, .75) 56%, transparent 70%);
+  animation: blast .55s ease-out forwards;
+}
+@keyframes blast { from { transform: scale(.2); opacity: 1; } to { transform: scale(1.4); opacity: 0; } }
+
+.rays {
+  position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  background: repeating-conic-gradient(from 0deg at var(--x) var(--y), rgba(190, 255, 120, .6) 0 8deg, transparent 8deg 22deg);
+  animation: rays .8s ease-out forwards;
+}
+@keyframes rays { from { opacity: 0; } 25% { opacity: 1; } to { opacity: 0; } }

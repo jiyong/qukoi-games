@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>植物大战僵尸 · 华容道</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="board.css">
+  <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <div class="sun-orb"></div>
+  </div>
+
+  <header class="sign">
+    <span class="sign-small">植物大战僵尸</span>
+    <h1>华容道</h1>
+  </header>
+
+  <main class="stage">
+    <section class="hud" aria-label="游戏状态">
+      <div class="sun-counter" title="已走步数">
+        <span class="sun-icon" aria-hidden="true"></span>
+        <span id="moves">0</span>
+      </div>
+      <div class="level-info">
+        <strong id="level-name">前院清晨</strong>
+        <small id="level-sub">第 1 关 · 最少 19 步</small>
+      </div>
+    </section>
+
+    <div class="yard">
+      <div class="board" id="board" role="application" aria-label="华容道棋盘">
+        <div class="exit" aria-hidden="true"><span>出口</span></div>
+      </div>
+    </div>
+
+    <nav class="toolbar" aria-label="操作">
+      <button class="packet" id="btn-levels"><span class="ico">🗺️</span>选关</button>
+      <button class="packet" id="btn-undo"><span class="ico">↩️</span>撤销</button>
+      <button class="packet packet-gold" id="btn-hint"><span class="ico">💡</span>提示</button>
+      <button class="packet" id="btn-reset"><span class="ico">🔄</span>重来</button>
+      <button class="packet" id="btn-sound"><span class="ico" id="sound-ico">🔊</span>音效</button>
+    </nav>
+    <p class="tip">拖动植物给路障僵尸让路，把它从底部的<b>出口</b>放出去！</p>
+  </main>
+
+  <dialog id="dlg-levels" class="panel">
+    <h2>选择关卡</h2>
+    <div class="level-grid" id="level-grid"></div>
+    <button class="btn-wood" data-close>关闭</button>
+  </dialog>
+
+  <dialog id="dlg-win" class="panel">
+    <div class="trophy" aria-hidden="true">🏆</div>
+    <h2>僵尸逃出生天！</h2>
+    <div class="stars" id="win-stars"></div>
+    <p id="win-text"></p>
+    <div class="panel-actions">
+      <button class="btn-wood" id="btn-replay">再玩一次</button>
+      <button class="btn-wood btn-green" id="btn-next">下一关</button>
+    </div>
+  </dialog>
+
+  <div class="fx-layer" id="fx" aria-hidden="true"></div>
+
+  <script src="solver.js"></script>
+  <script src="levels.js"></script>
+  <script src="art-small.js"></script>
+  <script src="art-big.js"></script>
+  <script src="art-zombie.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+  <script src="input.js"></script>
+  <script src="controls.js"></script>
+</body>
+</html>

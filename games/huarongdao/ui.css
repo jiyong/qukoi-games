@@ -1,0 +1,75 @@
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+
+.packet {
+  font-family: var(--font); font-size: 15px; color: var(--ink);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  width: 64px; padding: 6px 0 5px; border-radius: 10px; cursor: pointer;
+  background: linear-gradient(#fff6d6 0 62%, #e9c983 62%);
+  border: 3px solid #7a5228;
+  box-shadow: inset 0 0 0 2px #fff, 0 4px 0 #7a5228, 0 7px 10px rgba(0, 0, 0, 0.25);
+  transition: translate 0.12s, box-shadow 0.12s, filter 0.12s;
+}
+.packet .ico { font-size: 22px; line-height: 26px; }
+.packet:hover { translate: 0 -2px; filter: brightness(1.05); }
+.packet:active { translate: 0 3px; box-shadow: inset 0 0 0 2px #fff, 0 1px 0 #7a5228; }
+.packet:focus-visible { outline: 3px solid #2b8cff; outline-offset: 2px; }
+.packet:disabled { filter: grayscale(0.8) brightness(0.85); cursor: not-allowed; translate: none; }
+.packet-gold { background: linear-gradient(#fff9c2 0 62%, #ffd23f 62%); border-color: #a86b00; }
+
+.tip {
+  margin: 4px 16px 0; padding: 8px 16px; max-width: 420px; text-align: center; font-size: 15px;
+  border-radius: 12px; background: rgba(255, 255, 255, 0.75); color: #2f5a10;
+}
+.tip b { color: #c0392b; font-weight: 400; }
+
+.panel {
+  font-family: var(--font); color: var(--ink); text-align: center;
+  width: min(92vw, 380px); padding: 22px 22px 18px; border-radius: 22px;
+  background: linear-gradient(#fff8e2, #f2dca8);
+  border: 5px solid var(--wood-dark);
+  box-shadow: inset 0 0 0 3px #fff, 0 10px 0 var(--wood-dark), 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+.panel[open] { animation: drop-in 0.45s var(--ease-pop); }
+.panel::backdrop { background: rgba(20, 40, 10, 0.55); backdrop-filter: blur(3px); }
+.panel h2 { margin: 0 0 14px; font-size: 26px; font-weight: 400; color: #2f6b0e; }
+@keyframes drop-in { from { translate: 0 -60px; opacity: 0; scale: 0.8; } }
+
+.level-grid { display: grid; gap: 10px; margin-bottom: 16px; }
+.level-btn {
+  font-family: var(--font); font-size: 18px; color: var(--ink); cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 14px; border-radius: 12px; border: 3px solid #7a5228;
+  background: #fffaf0; box-shadow: 0 4px 0 #7a5228;
+}
+.level-btn:hover { background: #fff1c9; }
+.level-btn.current { background: #d8ff9a; border-color: #2f6b0e; box-shadow: 0 4px 0 #2f6b0e; }
+.level-btn small { font-size: 13px; color: #8a6232; }
+.level-btn .lv-stars { color: #f0a500; letter-spacing: 2px; font-size: 16px; }
+
+.btn-wood {
+  font-family: var(--font); font-size: 18px; color: #fff; cursor: pointer;
+  padding: 8px 22px; border-radius: 12px; border: 3px solid #4a2a0e;
+  background: linear-gradient(var(--wood-light), var(--wood));
+  box-shadow: 0 4px 0 #4a2a0e; text-shadow: 0 2px 0 #4a2a0e;
+}
+.btn-wood:active { translate: 0 3px; box-shadow: 0 1px 0 #4a2a0e; }
+.btn-green { background: linear-gradient(#9be15d, #4fa82a); border-color: #1f4d0a; box-shadow: 0 4px 0 #1f4d0a; text-shadow: 0 2px 0 #1f4d0a; }
+.panel-actions { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
+
+.trophy { font-size: 64px; line-height: 1; animation: pop 1.2s var(--ease-pop) infinite; }
+.stars { display: flex; justify-content: center; gap: 6px; font-size: 40px; margin-bottom: 6px; }
+.stars span { color: #d6c39a; }
+.stars span.on { color: #ffc400; text-shadow: 0 0 12px #ffe06b; animation: star-in 0.5s var(--ease-pop) both; }
+.stars span:nth-child(2) { animation-delay: 0.15s; }
+.stars span:nth-child(3) { animation-delay: 0.3s; }
+#win-text { margin: 0 0 12px; font-size: 16px; color: #6a4a22; }
+@keyframes star-in { from { scale: 0; rotate: -90deg; } }
+
+.fx-layer { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+.fx-sun {
+  position: absolute; top: -60px; width: 44px; height: 44px; border-radius: 50%;
+  background: radial-gradient(circle at 40% 38%, #fff8b8, #ffd23f 50%, #ff9f0a);
+  box-shadow: 0 0 16px 6px rgba(255, 210, 63, 0.7);
+  animation: fall var(--dur) linear forwards;
+}
+@keyframes fall { to { translate: var(--dx) 115vh; rotate: 360deg; } }
