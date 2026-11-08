@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="description" content="经典打地鼠，地鼠王 +50 分，连打两只还能消除地洞，一关比一关快。">
+  <title>打地鼠</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔨</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1 class="logo">打地鼠</h1>
+    <dl class="stats">
+      <div><dt>关卡</dt><dd id="level">1</dd></div>
+      <div><dt>本关</dt><dd><span id="score">0</span><small>/<span id="target">300</span></small></dd></div>
+      <div><dt>总分</dt><dd id="total">0</dd></div>
+      <div><dt>地洞</dt><dd id="holes">9</dd></div>
+    </dl>
+    <button id="pause" class="icon-btn" type="button" aria-label="暂停" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+    </button>
+  </header>
+
+  <div class="progress" role="progressbar" aria-label="本关进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div id="bar" class="progress-fill"></div>
+  </div>
+
+  <main class="field">
+    <div id="board" class="board" aria-label="草地"></div>
+    <div id="toast" class="toast" aria-live="polite"></div>
+  </main>
+
+  <section id="overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="ov-title">
+    <div class="card">
+      <h2 id="ov-title">打地鼠</h2>
+      <div id="ov-body" class="ov-body">
+        <ul class="rules">
+          <li><span class="chip">+10</span>普通地鼠，停留 10 秒</li>
+          <li><span class="chip gold">+50</span>地鼠王，停留 5 秒</li>
+          <li><span class="chip red">连击</span>同时出现的两只都打中，消除一个洞（最少 7 个）</li>
+          <li><span class="chip green">过关</span>300 分通关，之后每关目标 +20</li>
+        </ul>
+      </div>
+      <button id="ov-btn" class="btn" type="button">开始游戏</button>
+    </div>
+  </section>
+
+  <template id="hole-tpl">
+    <button class="hole" type="button" aria-label="地洞">
+      <span class="pit"></span>
+      <span class="mole-wrap">
+        <svg class="mole" viewBox="0 0 100 100" aria-hidden="true">
+          <g class="crown">
+            <path d="M28 22 L34 4 L44 16 L50 0 L56 16 L66 4 L72 22 Z" fill="#ffd23f" stroke="#b8860b" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="50" cy="12" r="3.5" fill="#e63946"/>
+          </g>
+          <ellipse class="body" cx="50" cy="66" rx="34" ry="40"/>
+          <ellipse class="belly" cx="50" cy="80" rx="20" ry="22"/>
+          <ellipse cx="22" cy="34" rx="7" ry="8" class="ear"/>
+          <ellipse cx="78" cy="34" rx="7" ry="8" class="ear"/>
+          <circle cx="38" cy="50" r="6" fill="#1d1d1d"/>
+          <circle cx="62" cy="50" r="6" fill="#1d1d1d"/>
+          <circle cx="40" cy="48" r="2" fill="#fff"/>
+          <circle cx="64" cy="48" r="2" fill="#fff"/>
+          <path class="dizzy" d="M32 44 l12 12 M44 44 l-12 12 M56 44 l12 12 M68 44 l-12 12" stroke="#1d1d1d" stroke-width="4" stroke-linecap="round"/>
+          <ellipse cx="50" cy="62" rx="8" ry="6" fill="#ff8fa3"/>
+          <path d="M44 70 h12 v8 h-12 z" fill="#fff" stroke="#c9c9c9" stroke-width="1"/>
+          <path d="M50 70 v8" stroke="#c9c9c9" stroke-width="1"/>
+          <path d="M20 64 h14 M20 70 h14 M66 64 h14 M66 70 h14" stroke="#3b2414" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="dirt"></span>
+      <span class="timer"><span class="timer-fill"></span></span>
+    </button>
+  </template>
+
+  <script src="game.js"></script>
+  <script src="audio.js"></script>
+  <script src="ui.js"></script>
+</body>
+</html>

@@ -1,6 +1,19 @@
 {
-  "generated": "2026-11-01T13:25:40.649Z",
+  "generated": "2026-11-08T02:34:04.900Z",
   "games": [
+    {
+      "id": "dadishu",
+      "url": "games/dadishu/",
+      "title": "打地鼠",
+      "desc": "经典打地鼠，地鼠王 +50 分，连打两只还能消除地洞，一关比一关快。",
+      "tags": [
+        "休闲",
+        "反应"
+      ],
+      "thumb": "thumbs/dadishu.jpg",
+      "updated": "2026-11-08",
+      "order": 0
+    },
     {
       "id": "huarongdao",
       "url": "games/huarongdao/",
