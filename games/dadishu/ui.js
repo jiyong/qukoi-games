@@ -6,7 +6,6 @@
   const overlay = $('overlay');
   const holeEls = new Map();
   const WHACK_MS = 260;
-  const GONE_MS = 380;
 
   const game = Whack.createGame({ onEvent: (type, data) => handlers[type] && handlers[type](data) });
 
@@ -21,8 +20,9 @@
     return best;
   }
 
+  // Count every grid cell, including removed holes, so the board never reflows mid-level.
   function layout() {
-    const n = holeEls.size;
+    const n = board.children.length;
     if (!n) return;
     const cols = bestCols(n);
     board.style.setProperty('--cols', cols);
@@ -38,6 +38,7 @@
       el.classList.add('enter');
       el.style.animationDelay = `${i * 30}ms`;
       el.setAttribute('aria-label', `地洞 ${i + 1}`);
+      el.dataset.label = `地洞 ${i + 1}`;
       holeEls.set(id, el);
       board.append(el);
     });
@@ -62,7 +63,8 @@
 
   function renderHud() {
     const s = game.state;
-    $('level').textContent = s.level;
+    const cfg = Whack.levelConfig(s.level || 1);
+    $('level').textContent = cfg.endless ? `无尽${cfg.round}` : s.level;
     $('score').textContent = s.score;
     $('target').textContent = s.target;
     $('total').textContent = s.total;
@@ -74,11 +76,14 @@
 
   function lowerMole(el) {
     el.classList.remove('up', 'king', 'whacked');
-    el.setAttribute('aria-label', '地洞');
+    el.setAttribute('aria-label', el.dataset.label);
   }
 
   const handlers = {
-    level() { buildBoard(game.state.holes); },
+    level({ level }) {
+      buildBoard(game.state.holes);
+      if (level === Whack.ENDLESS_FROM) toast('进入无尽模式');
+    },
     spawn(m) {
       const el = holeEls.get(m.holeId);
       el.style.setProperty('--stay', `${m.expiresAt - m.bornAt}ms`);
@@ -103,17 +108,22 @@
       toast('连击！消除一个洞');
       const el = holeEls.get(holeId);
       el.classList.add('gone');
+      el.setAttribute('aria-hidden', 'true');
+      el.tabIndex = -1;
       holeEls.delete(holeId);
-      setTimeout(() => { el.remove(); layout(); }, GONE_MS);
       renderHud();
     },
     clear({ level, score, total }) {
       Sfx.clear();
       holeEls.forEach((el) => { if (!el.classList.contains('whacked')) lowerMole(el); });
+      const cur = Whack.levelConfig(level);
       const next = Whack.levelConfig(level + 1);
-      showOverlay(`第 ${level} 关通过`,
-        `<div class="big">${score} 分</div>总分 ${total}<br>下一关：${next.holes} 个洞，目标 ${next.target} 分`,
-        '下一关', () => game.nextLevel(performance.now()));
+      const title = cur.endless ? `无尽第 ${cur.round} 轮通过` : `第 ${level} 关通过`;
+      const nextText = next.endless
+        ? `无尽第 ${next.round} 轮：难度已满，目标 ${next.target} 分`
+        : `下一关：${next.holes} 个洞，目标 ${next.target} 分`;
+      showOverlay(title, `<div class="big">${score} 分</div>总分 ${total}<br>${nextText}`,
+        next.endless && !cur.endless ? '进入无尽模式' : '下一关', () => game.nextLevel(performance.now()));
       $('pause').disabled = true;
     },
   };

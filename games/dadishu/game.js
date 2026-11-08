@@ -8,11 +8,15 @@
   const KING_CHANCE = 0.12;
   const SPAWN_DELAY = [350, 1100];
   const FIRST_SPAWN_DELAY = 600;
+  // Holes and stay times hit their caps here; later levels only raise the target.
+  const ENDLESS_FROM = 7;
 
   function levelConfig(level) {
     const n = level - 1;
     return {
       level,
+      endless: level >= ENDLESS_FROM,
+      round: Math.max(0, level - ENDLESS_FROM + 1),
       holes: Math.min(9 + n * 3, MAX_HOLES),
       stay: {
         normal: Math.max(10000 - n * 1500, 2000),
@@ -137,7 +141,7 @@
     };
   }
 
-  const api = { createGame, levelConfig, MAX_MOLES, MIN_HOLES, SCORE };
+  const api = { createGame, levelConfig, MAX_MOLES, MIN_HOLES, SCORE, ENDLESS_FROM };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Whack = api;
 })(typeof window !== 'undefined' ? window : globalThis);

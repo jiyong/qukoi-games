@@ -36,6 +36,17 @@ test('later levels add holes, shorten stay, raise target by 20', () => {
   assert.equal(levelConfig(3).target, 340);
 });
 
+test('endless mode starts at level 7 where holes and stay times are capped', () => {
+  assert.equal(levelConfig(6).endless, false);
+  const [l7, l9] = [levelConfig(7), levelConfig(9)];
+  assert.equal(l7.endless, true);
+  assert.equal(l7.round, 1);
+  assert.equal(l9.round, 3);
+  assert.equal(l9.holes, l7.holes);
+  assert.deepEqual(l9.stay, l7.stay);
+  assert.equal(l9.target, l7.target + 40);
+});
+
 test('never more than two moles at once', () => {
   const { g } = setup();
   for (let t = 0; t < 9000; t += 100) g.tick(t);
