@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-08T03:08:21.289Z",
+  "generated": "2026-11-08T13:06:20.182Z",
   "games": [
     {
       "id": "dadishu",
@@ -11,6 +11,19 @@
         "反应"
       ],
       "thumb": "thumbs/dadishu.jpg",
+      "updated": "2026-11-08",
+      "order": 0
+    },
+    {
+      "id": "yayabaoweizhan",
+      "url": "games/yayabaoweizhan/",
+      "title": "芽芽保卫战",
+      "desc": "在菜园小路边种下喷壶、仙人掌和辣椒炮，挡住一波波害虫，守护幼苗芽芽。",
+      "tags": [
+        "塔防",
+        "策略"
+      ],
+      "thumb": "thumbs/yayabaoweizhan.jpg",
       "updated": "2026-11-08",
       "order": 0
     },
