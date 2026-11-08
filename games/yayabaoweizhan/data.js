@@ -45,19 +45,28 @@
     hay: { name: '草垛', size: 2, hp: 400, gold: 90 },
   };
 
-  // Wave = list of groups [type, count, gap, delay]. Every other wave from the 4th mixes in a second type.
+  // Wave = list of groups [type, count, gap, delay].
+  // The first two waves only use pool[0] so players can set up; heavy bugs (weight >= 2) wait until wave 4;
+  // from wave 5 every other wave mixes in a second, smaller group.
+  const WARMUP_WAVES = 2;
+  const HEAVY_FROM = 3;
   function makeWaves(n, pool, extra = {}) {
     const waves = [];
+    const light = pool.filter((t) => ENEMIES[t].weight < 2);
     for (let i = 0; i < n; i++) {
-      const base = 6 + Math.floor(i * 0.9);
-      const gap = Math.max(0.5, 1.2 - i * 0.04);
+      const base = 5 + Math.floor(i * 0.7);
+      const gap = Math.max(0.7, 1.4 - i * 0.035);
       const group = (type, share, delay) => {
         const w = ENEMIES[type].weight;
         const count = Math.max(1, Math.round((base * share) / w));
         return [type, count, Math.round(gap * Math.sqrt(w) * 100) / 100, delay];
       };
-      const wave = [group(pool[i % pool.length], 1, 0)];
-      if (i >= 2 && i % 2 === 1) wave.push(group(pool[(i + 1) % pool.length], 0.6, 2.5));
+      const pick = (k) => {
+        const type = pool[k % pool.length];
+        return i < HEAVY_FROM && ENEMIES[type].weight >= 2 ? light[k % light.length] : type;
+      };
+      const wave = [group(i < WARMUP_WAVES ? pool[0] : pick(i), 1, 0)];
+      if (i >= 4 && i % 2 === 0) wave.push(group(pick(i + 1), 0.5, 3));
       waves.push(wave.concat(extra[i + 1] || []));
     }
     return waves;
@@ -113,7 +122,7 @@
       waves: makeWaves(12, ['caterpillar', 'ant', 'ladybug', 'snail']),
     },
     {
-      id: 4, name: '夜光菌林', gold: 650,
+      id: 4, name: '夜光菌林', gold: 750,
       map: [
         '....x.......',
         '.#######....',

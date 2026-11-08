@@ -37,7 +37,7 @@ test('every shipped level is valid and wave counts match the design', () => {
   assert.deepEqual(LEVELS.map((l) => l.waves.length), [8, 10, 12, 14, 16, 20]);
   for (const level of LEVELS) {
     assert.doesNotThrow(() => createEngine(level), `level ${level.id}`);
-    assert.ok(level.gold >= 400 && level.gold <= 700);
+    assert.ok(level.gold >= 400 && level.gold <= 800);
   }
 });
 

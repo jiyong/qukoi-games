@@ -81,6 +81,8 @@
     } else if (type === 'wave') {
       Sfx.wave();
       toast(d.wave === d.total ? '最后一波！' : `第 ${d.wave} 波来了`);
+    } else if (type === 'cleared') {
+      toast(`第 ${d.wave} 波已清空，抓紧布防`);
     } else if (type === 'dash') {
       Sfx.dash();
       toast('甲虫王发怒了！');

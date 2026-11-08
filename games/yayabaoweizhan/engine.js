@@ -6,8 +6,8 @@
   const M = isNode ? require('./map.js') : root.YayaMap;
 
   const MAX_HP = 10;
-  const PREP_TIME = 10;
-  const WAVE_GAP = 4;
+  const PREP_TIME = 15;
+  const WAVE_BREAK = 8;
   const EARLY_BONUS = 2;
   const SELL_RATE = 0.7;
   const GROUP_GAP = 0.22;
@@ -166,9 +166,17 @@
       const queue = buildQueue(level.waves[idx], s.time, idx);
       s.queue.push(...queue);
       s.queue.sort((a, b) => a.at - b.at);
-      const last = queue.length ? queue[queue.length - 1].at : s.time;
-      s.nextWaveAt = s.wave < s.totalWaves ? last + WAVE_GAP : Infinity;
+      s.nextWaveAt = Infinity;
       emit('wave', { wave: s.wave, total: s.totalWaves });
+    }
+
+    // The next wave is only scheduled once the current one is fully cleared, so waves never stack.
+    function checkBreak() {
+      if (s.status !== 'playing' || s.wave >= s.totalWaves) return;
+      if (s.queue.length || s.enemies.length) return;
+      s.status = 'prep';
+      s.nextWaveAt = s.time + WAVE_BREAK;
+      emit('cleared', { wave: s.wave, total: s.totalWaves });
     }
 
     function spawn(item) {
@@ -393,7 +401,7 @@
     function tick(dt) {
       if (isOver()) return;
       s.time += dt;
-      if (s.wave < s.totalWaves && s.time >= s.nextWaveAt) startWave();
+      if (s.status === 'prep' && s.time >= s.nextWaveAt) startWave();
       while (s.queue.length && s.queue[0].at <= s.time) spawn(s.queue.shift());
       moveEnemies(dt);
       towersAct(dt);
@@ -401,6 +409,7 @@
       s.enemies = s.enemies.filter((e) => !e.dead);
       s.obstacles = s.obstacles.filter((o) => !o.dead);
       checkEnd();
+      if (!isOver()) checkBreak();
     }
 
     function enemyNear(x, y, radius) {
@@ -420,7 +429,7 @@
     };
   }
 
-  const api = { createEngine, starsFor, hpScale, buildQueue, stat, MAX_HP, PREP_TIME, WAVE_GAP, EARLY_BONUS, SELL_RATE };
+  const api = { createEngine, starsFor, hpScale, buildQueue, stat, MAX_HP, PREP_TIME, WAVE_BREAK, EARLY_BONUS, SELL_RATE };
   if (isNode) module.exports = api;
   else root.YayaEngine = api;
 })(typeof window !== 'undefined' ? window : globalThis);

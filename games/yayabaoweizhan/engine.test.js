@@ -8,6 +8,7 @@ const OBST = [{ type: 'rock', c: 1, r: 3, gift: 'sprinkler' }, { type: 'boulder'
 function setup(over = {}) {
   const events = [];
   const level = { id: 1, gold: 1000, map: MAP, obstacles: OBST, waves: [[['caterpillar', 1, 1]]], ...over };
+  // MAP path is 11 cells; a caterpillar (speed 1) needs 11s to walk it.
   const g = E.createEngine(level, { onEvent: (t, d) => events.push([t, d]) });
   return { g, s: g.state, events, has: (t) => events.some(([x]) => x === t) };
 }
@@ -49,10 +50,52 @@ test('upgrade to level 3 then refuses; sell refunds 70% of invested', () => {
 test('start early pays 2 gold per remaining second', () => {
   const { g, s } = setup();
   run(g, 3.5);
-  assert.equal(g.startNow(), 6 * 2);
+  assert.equal(g.startNow(), Math.floor(E.PREP_TIME - 3.5) * E.EARLY_BONUS);
   g.tick(0.01);
   assert.equal(s.wave, 1);
   assert.equal(g.startNow(), 0);
+});
+
+test('next wave waits until the current wave is cleared, then a break', () => {
+  const two = [[['caterpillar', 1, 1]], [['caterpillar', 1, 1]]];
+  const { g, s, has } = setup({ waves: two });
+  g.startNow();
+  g.tick(0.01);
+  assert.equal(s.status, 'playing');
+  run(g, 9);
+  assert.equal(s.enemies.length, 1);
+  assert.equal(s.wave, 1, 'second wave must not start while a bug is still on the road');
+  while (s.status === 'playing') g.tick(1 / 60);
+  assert.equal(s.enemies.length, 0);
+  assert.equal(s.status, 'prep');
+  assert.ok(has('cleared'));
+  assert.ok(Math.abs(s.nextWaveAt - s.time - E.WAVE_BREAK) < 0.05);
+  assert.ok(g.startNow() > 0, 'break can be skipped early for bonus gold');
+  g.tick(0.01);
+  assert.equal(s.wave, 2);
+});
+
+test('waves never overlap in any built-in level', () => {
+  const D = require('./data.js');
+  for (const L of D.LEVELS) {
+    const g = E.createEngine(L);
+    let maxWaveOnField = 0;
+    while (g.state.status !== 'won' && g.state.status !== 'lost' && g.state.time < 2000) {
+      g.tick(1 / 20);
+      const ids = new Set(g.state.queue.map((q) => q.waveIdx));
+      maxWaveOnField = Math.max(maxWaveOnField, ids.size);
+    }
+    assert.ok(maxWaveOnField <= 1, `level ${L.id} queued two waves at once`);
+  }
+});
+
+test('early waves are light: no heavy bugs before wave 4', () => {
+  const D = require('./data.js');
+  for (const L of D.LEVELS) {
+    L.waves.slice(0, 3).forEach((w, i) => w.forEach(([type]) => {
+      assert.ok(D.ENEMIES[type].weight < 2, `level ${L.id} wave ${i + 1} has heavy ${type}`);
+    }));
+  }
 });
 
 test('waves spawn by schedule with ant groups expanded', () => {
